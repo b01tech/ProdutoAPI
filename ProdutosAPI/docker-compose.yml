@@ -1,0 +1,34 @@
+﻿services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:8080" 
+      - "5001:8081" 
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - monitoramento
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - monitoramento
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - monitoramento
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+
+networks:
+  monitoramento:
+    driver: bridge
