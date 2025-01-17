@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProdutosAPI.Models;
+using ProdutosAPI.Pagination;
 using ProdutosAPI.Repositories;
 
 namespace ProdutosAPI.Controllers;
@@ -15,9 +16,9 @@ public class ProdutoController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Produto>> GetAll()
+    public ActionResult<IEnumerable<Produto>> GetAll([FromQuery] PageParams pageParams)
     {
-        var produtos = _repository.GetAll();
+        var produtos = _repository.GetProdutos(pageParams);
         return Ok(produtos);
     }
 

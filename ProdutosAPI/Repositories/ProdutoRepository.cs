@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProdutosAPI.Data;
 using ProdutosAPI.Models;
+using ProdutosAPI.Pagination;
 
 namespace ProdutosAPI.Repositories;
 
@@ -16,6 +17,13 @@ public class ProdutoRepository : IProdutoRepository
     public IEnumerable<Produto> GetAll()
     {
         return _context.produtos.AsNoTracking().ToList();  
+    }
+    public IEnumerable<Produto> GetProdutos(PageParams pageParams)
+    {
+        var produtos = GetAll()
+            .Skip(pageParams.PageSize * (pageParams.PageNumber - 1))
+            .Take(pageParams.PageSize);
+        return produtos;
     }
     public Produto Get(long id)
     {
@@ -53,4 +61,6 @@ public class ProdutoRepository : IProdutoRepository
         return produto;
 
     }
+
+
 }
